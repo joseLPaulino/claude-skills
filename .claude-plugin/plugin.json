@@ -1,0 +1,18 @@
+{
+  "name": "hcltech-ai-labs",
+  "version": "0.1.0",
+  "description": "HCLTech AI Labs skills for agentic solution architecture, ROM estimation, architecture diagrams, and branded slide generation.",
+  "author": {
+    "name": "HCLTech AI Labs",
+    "email": "jose.paulino@hcltech.com"
+  },
+  "keywords": [
+    "hcltech",
+    "architecture",
+    "agentic",
+    "rom",
+    "slides",
+    "diagrams"
+  ],
+  "repository": "https://github.com/joseLPaulino/claude-skills"
+}
