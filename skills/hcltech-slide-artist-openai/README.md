@@ -1,120 +1,65 @@
 # HCLTech Slide Artist — OpenAI
 
-Generates HCLTech-branded presentation slide images (PNG/JPEG) using the OpenAI Images API (`gpt-image-2`). Designed to be invoked by Claude via the `hcltech-slide-artist-openai` skill.
+A Claude skill for generating HCLTech-branded presentation slide images (PNG/JPEG) using the OpenAI Images API.
 
----
+## What it does
 
-## What It Does
+- Transforms visual briefs into polished 16:9 HCLTech-style raster slide images
+- Applies HCLTech brand identity: white background, cyan-to-purple gradients, modern sans-serif
+- Validates each generated image for brand compliance, layout, text readability, and required content
+- Retries once with corrective instructions if quality checks fail
+- Invoked directly by users or orchestrated by `hcltech-rom-package-builder` for the visual polish deck layer
 
-Given a visual brief or slide description, this skill:
-1. Synthesizes a structured image prompt following HCLTech brand guidelines
-2. Calls the OpenAI Images API via a Node.js generator script
-3. Saves a raster slide image (16:9, 1536×864) to the specified output path
-4. Reviews the result for brand compliance, layout, and text readability
+## Trigger phrases
 
-> For editable `.pptx` output, use the **pptx** skill instead.
+> "generate a slide image", "HCLTech slide visual", "visual polish deck", "raster slide", "executive slide image", "slide from this brief", "OpenAI image slide"
 
----
+## Prerequisites
 
-## Structure
-
-```
-hcltech-slide-artist-openai/
-├── SKILL.md                  # Claude skill instructions
-├── README.md                 # This file
-├── .env.example              # API key template
-├── .gitignore                # Ignores .env
-├── scripts/
-│   ├── generate-slide.js     # Node.js image generator
-│   └── package.json          # openai SDK dependency
-└── references/
-    ├── brand-guide.md        # HCLTech visual identity rules
-    ├── layout-patterns.md    # Reusable slide layout patterns
-    └── setup.md              # Prerequisites and configuration
-```
-
----
+- Node.js 18 or higher
+- OpenAI API key with image generation access (`gpt-image-2`)
+- npm dependencies installed
 
 ## Setup
-
-### 1. Install dependencies
 
 ```bash
 cd skills/hcltech-slide-artist-openai/scripts
 npm install
+echo "OPENAI_API_KEY=your-api-key-here" > .env
 ```
-
-### 2. Configure your API key
-
-Copy `.env.example` to `.env` and fill in your key:
-
-```bash
-cp .env.example .env
-```
-
-```text
-OPEN_AI_KEY=sk-...
-```
-
-Or export it as an environment variable:
-
-```bash
-export OPENAI_API_KEY="sk-..."
-```
-
-### 3. Requirements
-
-- Node.js 18+
-- OpenAI API key with image generation access (`gpt-image-2`)
-
----
 
 ## Usage
 
-### Via Claude (recommended)
-
-Ask Claude in Cowork: *"Generate an HCLTech slide for [your brief]"* — the skill handles everything.
-
-### Direct CLI
-
 ```bash
-export OPENAI_API_KEY="sk-..."
-
-node scripts/generate-slide.js \
-  "Your detailed prompt here" \
-  "$PWD/output-slide.png"
+node scripts/generate-slide.js "[PROMPT]" "/path/to/output.png"
 ```
 
-Optional flags:
+Defaults: `gpt-image-2`, `1536x864`, `medium` quality. If size is rejected, retry with `--size 1536x1024`.
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--size` | `1536x864` | Image dimensions |
-| `--quality` | `medium` | `low`, `medium`, or `high` |
-| `--format` | `png` | `png` or `jpg` |
+## Smoke test
 
-If `1536x864` is rejected by your account, retry with `--size 1536x1024`.
+```bash
+cd scripts
+node generate-slide.js \
+  "A full 16:9 presentation slide design. Top-Left: the text Smoke Test in bold modern sans-serif. Background: Pure white. Center: HCLTech cyan-to-purple gradient card. Visible text: Smoke Test." \
+  /tmp/smoke-test.png
+```
 
----
+## Environment variables
 
-## Defaults
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `OPENAI_API_KEY` | Yes | — | OpenAI API key (set in `scripts/.env` or environment) |
+| `OPENAI_IMAGE_MODEL` | No | `gpt-image-2` | Image generation model |
+| `OPENAI_IMAGE_SIZE` | No | `1536x864` | Output dimensions |
+| `OPENAI_IMAGE_QUALITY` | No | `medium` | Generation quality |
 
-| Setting | Value |
-|---------|-------|
-| Model | `gpt-image-2` |
-| Size | `1536x864` |
-| Quality | `medium` |
+> **Note:** `scripts/.env` is excluded from version control via `.gitignore`. Set your API key manually on each machine.
 
-Override via environment variables: `OPENAI_IMAGE_MODEL`, `OPENAI_IMAGE_SIZE`, `OPENAI_IMAGE_QUALITY`.
+## Reference files
 
----
-
-## Troubleshooting
-
-| Error | Fix |
-|-------|-----|
-| `Missing API key` | Set `OPENAI_API_KEY` env var or add to `.env` |
-| `Module not found` | Run `npm install` in `scripts/` |
-| `Size unsupported` | Retry with `--size 1536x1024` |
-| `Connection error` | Check network access to `api.openai.com` |
-| `Model unavailable` | Set `OPENAI_IMAGE_MODEL` to another image-capable model |
+| File | Purpose |
+|------|---------|
+| `references/brand-guide.md` | HCLTech visual identity constraints |
+| `references/layout-patterns.md` | Reusable slide layout patterns |
+| `references/setup.md` | Full setup and troubleshooting guide |

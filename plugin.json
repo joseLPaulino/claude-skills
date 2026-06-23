@@ -1,0 +1,33 @@
+{
+  "name": "hcltech-ai-lab-skills",
+  "version": "1.0.0",
+  "description": "HCLTech AI Lab skills for agentic solution architecture, ROM estimation, diagram design, and branded slide generation.",
+  "author": "HCLTech AI Lab",
+  "skills": [
+    {
+      "name": "agentic-arch-documenter",
+      "path": "skills/agentic-arch-documenter",
+      "description": "Produces L1/L2/L3 architecture documents from any customer input — briefs, RFPs, PPTs, PDFs, or plain text. Orchestrates docx and pptx skills for branded HCLTech output."
+    },
+    {
+      "name": "architecture-diagram-designer",
+      "path": "skills/architecture-diagram-designer",
+      "description": "Creates and improves architecture diagrams in Mermaid across L1, L2, and L3 views. Platform-neutral by default; adapts to AWS, Azure, GCP, or on-prem."
+    },
+    {
+      "name": "hcltech-rom-package-builder",
+      "path": "skills/hcltech-rom-package-builder",
+      "description": "Builds complete HCLTech ROM packages from messy client inputs. Orchestrates agentic-arch-documenter, architecture-diagram-designer, pptx, and hcltech-slide-artist-openai."
+    },
+    {
+      "name": "hcltech-slide-artist-openai",
+      "path": "skills/hcltech-slide-artist-openai",
+      "description": "Generates HCLTech-branded 16:9 slide images using the OpenAI Images API. Requires OPENAI_API_KEY and Node.js 18+.",
+      "requires": {
+        "env": ["OPENAI_API_KEY"],
+        "runtime": "node>=18",
+        "setup": "cd skills/hcltech-slide-artist-openai/scripts && npm install"
+      }
+    }
+  ]
+}

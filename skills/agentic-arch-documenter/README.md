@@ -1,81 +1,40 @@
 # Agentic Architecture Documenter
 
-A Claude skill that acts as a Senior AI Solution Architect at HCLTech AI Lab. Given any customer input — brief, RFP, PPT, PDF, Word doc, spreadsheet, or plain text — it produces a rigorous, audience-appropriate architecture document with Mermaid diagrams.
+A Claude skill for producing rigorous L1/L2/L3 architecture documents from any customer input — briefs, RFPs, PPTs, PDFs, spreadsheets, or plain text.
 
----
+## What it does
 
-## What It Does
-
-- Ingests customer inputs in any format and extracts goals, constraints, systems, and requirements
-- Produces L1, L2, and L3 architecture views (as detail allows)
+- Ingests any source material (Word, PowerPoint, PDF, email, notes) and extracts requirements, goals, constraints, and stakeholders
 - Classifies every point as Confirmed, Assumption, Open Question, or Recommendation
-- Generates Mermaid architecture diagrams at the right level of depth
-- Orchestrates the **docx** and **pptx** skills for branded Word/PowerPoint output
-- Closes with architecture decisions, risks, open questions, and POC scope
+- Produces a full architecture document in Markdown with Mermaid diagrams at L1, L2, and L3 levels
+- Orchestrates the `docx` and `pptx` skills for branded HCLTech Word/PowerPoint output
+- Defaults to platform-neutral design; adapts to AWS, Azure, GCP, or on-prem when specified
 
----
+## Trigger phrases
 
-## When to Use
+> "create an architecture", "L1 design", "L2 diagram", "agentic solution", "solution architecture", "architecture document", "design this solution", "review this brief and design a solution"
 
-Trigger phrases: "create an architecture", "L1 design", "L2 diagram", "agentic solution", "solution architecture", "ROM architecture", "architecture document", "design this solution", "review this brief and design a solution."
+## Output
 
-> For pure diagram requests without architecture analysis, use **architecture-diagram-designer** instead.
+Markdown architecture document with:
+- Executive summary, business problem, goals, scope
+- Confirmed inputs, assumptions, open questions
+- Functional and non-functional requirements
+- L1 logical architecture + Mermaid diagram
+- L2/L3 views when source detail supports them
+- Agentic/AI design section
+- Security, governance, observability
+- Architecture decisions, risks, POC candidate scope, next steps
 
----
+## Reference files
 
-## Architecture Levels
+| File | Purpose |
+|------|---------|
+| `references/architecture-document-template.md` | Full document template |
+| `references/requirements-extraction-checklist.md` | Checklist for vague or scattered inputs |
+| `references/platform-mapping-guidance.md` | Cloud/on-prem platform guidance |
+| `references/poc-handoff.md` | Transitioning from L1 to POC |
+| `references/branded-output-template-guidance.md` | HCLTech Word/PowerPoint branding rules |
+| `references/sample-prompts.md` | Example invocations |
 
-| Level | Name | Contents |
-|-------|------|----------|
-| L1 | Executive Logical View | Actors, channels, orchestration, agent roles, tools/APIs, systems of record, governance, monitoring |
-| L2 | Detailed Logical Components | Agent responsibilities, RAG/knowledge flow, tool layer, integration boundaries, approval workflow, observability |
-| L3 | Deployment / Implementation View | Cloud services, network zones, IAM/RBAC, queues, databases, model endpoints, CI/CD — only when platform details are known |
-
----
-
-## Output Structure
-
-Default output is Markdown. For branded output, this skill orchestrates:
-- **docx** skill → `.docx` Word document
-- **pptx** skill → `.pptx` PowerPoint deck
-
-Full document includes: Executive Summary, Business Problem, Goals, Scope, Stakeholders, Requirements, Architecture Diagrams (Mermaid), Agentic Design, Security/Governance, Architecture Decisions, Risks, Open Questions, POC Scope, and Next Steps.
-
----
-
-## Structure
-
-```
-agentic-arch-documenter/
-├── SKILL.md          # Claude skill instructions
-├── README.md         # This file
-└── references/
-    ├── architecture-document-template.md
-    ├── requirements-extraction-checklist.md
-    ├── platform-mapping-guidance.md
-    ├── poc-handoff.md
-    ├── branded-output-template-guidance.md
-    └── sample-prompts.md
-```
-
----
-
-## Example Prompts
-
-```
-Review this RFP and create an L1 architecture document.
-
-Design an agentic solution for automated claims processing.
-
-Create a solution architecture for this brief: [paste brief]
-
-Build an L1 + L2 architecture for a customer support AI agent on Azure.
-```
-
----
-
-## Platform Behavior
-
-- **No platform specified** → platform-neutral logical architecture with optional mapping table
-- **Platform specified** → uses that platform's native service names
-- **Multiple platforms** → logical architecture first, then a provider mapping section
+## No environment variables required

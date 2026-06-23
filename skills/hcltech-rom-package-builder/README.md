@@ -1,48 +1,33 @@
 # HCLTech ROM Package Builder
 
-A Claude skill that builds a complete HCLTech Rough Order of Magnitude (ROM) package from messy client inputs — notes, screenshots, meeting recordings, architecture comments, or draft artifacts. Orchestrates four specialist skills to produce a full sales/delivery estimation package.
+A Claude skill for building complete HCLTech ROM (Rough Order of Magnitude) packages from messy client inputs — notes, screenshots, meeting transcripts, draft artifacts, or manager feedback.
 
----
+## What it does
 
-## What It Does
+- Ingests and classifies any source material into a structured intake table
+- Shapes a commercial ROM: scope, delivery horizon, team/pod shape, cost drivers, build-vs-wrap boundary
+- Produces a full set of Markdown source artifacts
+- Orchestrates specialist skills for editable PPTX and visual polish deck output
+- Validates the complete package against a quality checklist before handoff
 
-Produces a complete ROM engagement package including:
+## Trigger phrases
 
-- **L1 Architecture document** (Markdown + branded Word/PPT)
-- **ROM estimate** with POC / MVP / Production breakdown
-- **Assumptions, constraints, dependencies, and risks**
-- **Open questions and validation needs**
-- **Editable HCLTech PowerPoint deck** (with and without speaker notes)
-- **Visual polish deck** (executive-ready raster slide images)
-- **Implementation scaffold**
-- **QA checklist and stakeholder comment log**
+> "create a ROM", "build a ROM package", "ROM estimate", "HCLTech deck for this opportunity", "editable deck", "visual polish deck", "ROM from these notes"
 
----
-
-## When to Use
-
-Trigger phrases: "create a ROM", "build a ROM package", "ROM estimate", "L1 architecture for the ROM", "HCLTech deck for this opportunity", "editable deck", "visual polish deck", "ROM from these notes."
-
----
-
-## Orchestration Map
-
-This skill coordinates four specialist skills — it does not duplicate their logic:
+## Orchestration map
 
 | Task | Skill |
 |------|-------|
-| L1 architecture, requirements synthesis, assumptions, risks, POC scope | **agentic-arch-documenter** |
-| Mermaid diagrams and diagram briefs | **architecture-diagram-designer** |
-| Editable `.pptx` with HCLTech templates, speaker notes, QA | **pptx** |
-| Executive-polish raster slide visuals (PNG/JPEG) | **hcltech-slide-artist-openai** |
+| L1 architecture, requirements, assumptions, risks | `agentic-arch-documenter` |
+| Mermaid diagrams, diagram cleanup | `architecture-diagram-designer` |
+| Editable HCLTech-branded `.pptx` | `pptx` |
+| Executive raster slide visuals | `hcltech-slide-artist-openai` |
 
----
-
-## Delivery Package Structure
+## Package output structure
 
 ```
 rom-package-<slug>/
-  inputs/                          # Raw client materials
+  inputs/
   source/
     rom-estimate.md
     l1-architecture.md
@@ -51,74 +36,30 @@ rom-package-<slug>/
     implementation-scaffold.md
     deck-outline.md
   editable-deck/
-    <slug>-hcltech-rom-with-notes.pptx
-    <slug>-hcltech-rom-clean.pptx
   visual-deck/
-    slide-images/
-    <slug>-openai-polish-with-notes.pptx
-    <slug>-openai-polish-clean.pptx
   qa/
-    package-quality-checklist.md
-    stakeholder-comment-log.md
 ```
 
----
+## Reference files
 
-## Recommended Deck Slide Spine
+| File | Purpose |
+|------|---------|
+| `references/workflow.md` | End-to-end ROM package flow |
+| `references/intake-checklist.md` | Messy/scattered input handling |
+| `references/rom-estimation-framework.md` | Estimate, pod model, POC/MVP boundary |
+| `references/agentic-delivery-model.md` | Agentic delivery ladder (Bronze/Silver/Gold PoC, MVP, Pilot) |
+| `references/l1-architecture-framework.md` | Architecture shape and build-vs-wrap boundary |
+| `references/hcltech-branded-output-rules.md` | Client-facing branding rules |
+| `references/deck-output-rules.md` | Editable and visual polish deck rules |
+| `references/package-quality-checklist.md` | Pre-delivery validation |
+| `references/sample-prompts.md` | Example invocations |
 
-1. Executive ROM Summary
-2. Client Context and Business Problem
-3. Proposed Solution Overview
-4. L1 Logical Architecture
-5. Build-vs-Wrap Boundary
-6. POC / MVP / Production Path
-7. Workstreams and Delivery Plan
-8. Team / Pod Shape
-9. ROM Estimate and Commercial Anchor
-10. Key Assumptions and Dependencies
-11. Risks and Mitigations
-12. Open Questions and Validation Needs
-13. Immediate Next Steps
+## Scripts
 
----
+`scripts/create-rom-package-scaffold.py` — scaffolds the engagement workspace directory structure.
 
-## Structure
-
-```
-hcltech-rom-package-builder/
-├── SKILL.md          # Claude skill instructions
-├── README.md         # This file
-└── references/
-    ├── workflow.md
-    ├── intake-checklist.md
-    ├── rom-estimation-framework.md
-    ├── agentic-delivery-model.md
-    ├── l1-architecture-framework.md
-    ├── hcltech-branded-output-rules.md
-    ├── deck-output-rules.md
-    ├── package-quality-checklist.md
-    └── sample-prompts.md
+```bash
+python3 scripts/create-rom-package-scaffold.py --slug <engagement-slug>
 ```
 
----
-
-## Example Prompts
-
-```
-Build a ROM package from these meeting notes: [paste notes]
-
-Create an HCLTech ROM for an agentic document processing opportunity.
-
-Build a ROM package from this screenshot of the architecture whiteboard.
-
-Generate an editable HCLTech deck and visual polish deck for this ROM.
-```
-
----
-
-## Important Rules
-
-- The editable `.pptx` is the source of truth — the visual polish deck is an executive layer only
-- All client-facing artifacts must use HCLTech-approved templates or branding
-- Separate confirmed facts from assumptions; never fabricate precision in estimates
-- Do not embed client files, secrets, or local paths into the skill directory
+## No environment variables required

@@ -1,99 +1,38 @@
 # Architecture Diagram Designer
 
-A Claude skill for creating, improving, and expanding architecture diagrams. Produces clean, readable Mermaid diagrams at the right level of abstraction — L1, L2, L3, agentic workflow, data flow, or sequence. Can also generate visual design briefs for PowerPoint or image generation.
+A Claude skill for creating, improving, and expanding architecture diagrams in Mermaid — for Markdown documents, Word, PowerPoint, or visual design tooling.
 
----
+## What it does
 
-## What It Does
+- Produces L1, L2, and L3 architecture diagrams in Mermaid syntax
+- Normalizes layout: users/channels left → orchestration center → tools/data/systems right
+- Applies platform-neutral labels by default; uses native service names when a cloud is specified
+- Validates diagrams against a quality checklist before delivery
+- Can be orchestrated by `agentic-arch-documenter` or `hcltech-rom-package-builder`
+- Produces visual design briefs for handoff to `hcltech-slide-artist-openai` or `pptx`
 
-- Creates Mermaid diagrams at L1, L2, or L3 depth based on available detail
-- Normalizes architecture layout: users/channels left → orchestration center → tools/data right
-- Applies platform-neutral labels by default; uses native service names when a platform is specified
-- Validates readability before output (clarity, boundaries, governance visibility)
-- Produces visual design briefs for the **pptx** or **hcltech-slide-artist-openai** skills when presentation-quality graphics are needed
-- Can be orchestrated by **agentic-arch-documenter** or **hcltech-rom-package-builder**
+## Trigger phrases
 
----
+> "create a diagram", "draw the architecture", "Mermaid diagram", "L1 diagram", "L2 diagram", "agentic workflow diagram", "data flow diagram", "deployment diagram", "diagram for the deck"
 
-## When to Use
+## Diagram types
 
-Trigger phrases: "create a diagram", "draw the architecture", "Mermaid diagram", "L1 diagram", "L2 diagram", "agentic workflow diagram", "data flow diagram", "deployment diagram", "cloud diagram", "diagram for the deck."
-
-> For full architecture documents with analysis, requirements, and decisions, use **agentic-arch-documenter** instead.
-
----
-
-## Diagram Types
-
-| Type | Use When |
-|------|----------|
-| L1 Logical Architecture | Actors, channels, orchestration, agents/services, tools/data, governance |
-| L2 Logical Detail | Agent roles, context retrieval, tool/API boundaries, data stores, observability |
-| L3 Deployment | Cloud services, runtime boundaries, network zones, IAM/RBAC, model infrastructure |
-| Agentic Workflow | Intake → planning → tool use → retrieval → decision → approval → action → audit |
+| Type | Use case |
+|------|---------|
+| L1 Logical Architecture | Actors, channels, agents, tools, governance, operations |
+| L2 Logical Detail | Component roles, RAG flow, tool boundaries, data stores, approval |
+| L3 Deployment | Cloud services, network zones, IAM, model endpoints, CI/CD |
+| Agentic Workflow | Intake → planning → tool use → retrieval → decision → approval → action |
 | Data Flow | Producers, stores, processing, consumers, controls |
-| Sequence | Order and interaction timing between components |
+| Sequence | Ordered interactions and timing |
 
----
+## Reference files
 
-## Example Output
+| File | Purpose |
+|------|---------|
+| `references/mermaid-patterns.md` | Reusable diagram starting patterns |
+| `references/diagram-quality-checklist.md` | Pre-delivery quality checks |
+| `references/platform-diagram-guidance.md` | Cloud/SaaS/on-prem diagram guidance |
+| `references/sample-prompts.md` | Example invocations |
 
-```mermaid
-flowchart LR
-  User["User / Business Team"] --> Channel["Application / Workflow Channel"]
-  Channel --> Orchestrator["Agent Orchestrator"]
-  Orchestrator --> Agent1["Triage Agent"]
-  Orchestrator --> Agent2["Research Agent"]
-  Orchestrator --> Agent3["Decision Agent"]
-  Agent2 --> KB["Knowledge Base / RAG"]
-  Agent1 --> Tools["Enterprise Tools / APIs"]
-  Agent3 --> Approval["Human Approval"]
-  Tools --> Systems["Systems of Record"]
-
-  subgraph Governance["Governance and Operations"]
-    Guardrails["Guardrails"]
-    Audit["Audit Trail"]
-    Monitoring["Monitoring"]
-  end
-
-  Orchestrator --> Guardrails
-  Orchestrator --> Audit
-  Orchestrator --> Monitoring
-```
-
----
-
-## Structure
-
-```
-architecture-diagram-designer/
-├── SKILL.md          # Claude skill instructions
-├── README.md         # This file
-└── references/
-    ├── mermaid-patterns.md
-    ├── diagram-quality-checklist.md
-    ├── platform-diagram-guidance.md
-    └── sample-prompts.md
-```
-
----
-
-## Example Prompts
-
-```
-Draw an L1 architecture diagram for an agentic customer support solution.
-
-Create an L2 diagram showing how the RAG pipeline connects to the orchestrator.
-
-Generate an agentic workflow diagram for invoice processing automation.
-
-Create a deployment diagram for this solution on Azure.
-```
-
----
-
-## Platform Behavior
-
-- **No platform specified** → logical names (e.g., "Vector Store", "Orchestrator", "API Gateway")
-- **Platform specified** → native service names (e.g., Azure AI Search, AWS Lambda, GCP Vertex AI)
-- **Multiple providers** → logical architecture first, provider mapping separate
+## No environment variables required
