@@ -1,0 +1,4 @@
+skills/**/scripts/.env
+node_modules/
+*.png
+*.jpg

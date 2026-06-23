@@ -1,0 +1,22 @@
+{
+  "name": "hcltech-slide-generator-openai",
+  "version": "1.0.0",
+  "description": "Generate HCLTech branded presentation slides using OpenAI image generation",
+  "main": "generate-slide.js",
+  "scripts": {
+    "test": "node generate-slide.js \"Test HCLTech slide: A diagram showing global presence\" \"test-output.png\""
+  },
+  "keywords": [
+    "hcltech",
+    "presentation",
+    "slides",
+    "openai",
+    "image-generation",
+    "corporate-design"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^6.37.0"
+  }
+}
